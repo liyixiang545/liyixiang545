@@ -1,0 +1,5 @@
+localhost="192.168.27.87"
+user= "root"
+password = "123456"
+db = "test"
+port = "13306"
