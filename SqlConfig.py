@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 HOST = 'localhost'
 PORT = 3306
 USERNAME = 'root'
-PASSWORD = '123456'
+PASSWORD = '1qazCDE#5tgb'
 DB = 'lywz'
 # dialect + driver://username:passwor@host:port/database
 DB_URI = f'mysql+pymysql://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DB}'
@@ -40,15 +40,3 @@ def mysql_init_conn():
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 # app.config['SECRET_KEY'] = "123456"
 
-
-# 邮箱配置文件
-# 当前使用的是QQ邮箱
-MAIL_SERVER = "smtp.qq.com"
-MAIL_PORT = 465
-MAIL_USE_TLS = False
-MAIL_USE_SSL = True
-MAIL_DEBUG = True
-MAIL_USERNAME = "1370586826@qq.com"
-MAIL_PASSWORD = "keaihhmmpspojigf"
-MAIL_DEFAULT_SENDER = "1370586826@qq.com"
-#
