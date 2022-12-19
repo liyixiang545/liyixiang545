@@ -4,8 +4,7 @@ import random
 import string
 from PIL import Image, ImageFont, ImageDraw
 
-
-#验证码代码  Pillow生成图形验证码
+# 验证码代码  Pillow生成图形验证码
 
 # 新建一个图层
 im = Image.new('RGB', (50, 12), 'white')

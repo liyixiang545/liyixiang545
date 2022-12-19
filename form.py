@@ -1,8 +1,6 @@
-#表单验证
-#处理表单
-
-#验证器
+# 表单验证
 #导入python中使用的 表单 库,与邮件和length
+
 import wtforms
 from wtforms.validators import length,email,DataRequired,EqualTo,Email,Regexp
 #用到email邮箱了，需要安装email_validator
@@ -39,7 +37,7 @@ class RigisterForm(wtforms.Form):
         if User_Model:
             raise wtforms.ValidationError("邮箱已经被注册！")
         else:
-            return "数据正常"
+            return "数据正常！"
 #验证验证码是否存储在数据库中 并在user_list 下注册方法中判断执行
     # def validate_cature_code(self,field):
     #     code = field.data
@@ -53,7 +51,6 @@ class QuestionForm(wtforms.Form):
     # Regexp('^[_a-zA-Z0-9\u4e00-\u9fa5]+$', flags=0, message=None)
 
 class UpsourceForm(wtforms.Form):
-    title = wtforms.StringField(validators=[length(min=2, max=50)])
+    title = wtforms.StringField(validators=[length(min=2, max=20)])
     msg = wtforms.StringField(validators=[length(min=3)])
-    img = wtforms.StringField(validators=[])
-    name = wtforms.StringField(validators=[])
+    name = wtforms.StringField(validators=[length(min=2)])
