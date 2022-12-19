@@ -54,6 +54,7 @@ def comment_list():
             return jsonify(comment_list)
         except Exception as e:
             loggerError(get_time() + " " + get_request_ip(request) + str(e))
+            return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
     else:
         try:
             da = request.get_data()
@@ -72,6 +73,7 @@ def comment_list():
             return jsonify({"data": data, "code": 200, "msg": "删除成功"})
         except Exception as e:
             loggerError(get_time()+" "+get_request_ip(request)+str(e))
+            return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
 
 
 # 蓝图相当于每个界面处理的模板，模块分散
@@ -150,6 +152,7 @@ def Comment_view():
             return jsonify({"code": "400", "msg": "非法请求，请检查后重新提交", "status": 0})
     except Exception as e :
         loggerError(get_time() + ' ' + ' ' + get_request_ip(request) + ' ' + str(e))
+        return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
 
 @bp.route('/Deletelist', methods=['GET', 'POST'])
 # @login_required
@@ -186,6 +189,8 @@ def Deletelist():
             return jsonify(Delete_list)
         except Exception as e:
             loggerError(get_time()+' '+' '+get_request_ip(request)+' '+str(e))
+            return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
+
     else:
         try:
             da = request.get_data()
@@ -205,4 +210,5 @@ def Deletelist():
             return jsonify({"data": data, "code": 200, "msg": "恢复成功"})
         except Exception as e:
             loggerError(get_time() + ' ' + ' ' + get_request_ip(request) + ' ' + str(e))
+            return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
 

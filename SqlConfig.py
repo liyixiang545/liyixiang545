@@ -6,9 +6,9 @@ HOST = 'localhost'
 PORT = 3306
 # PORT = '3306'
 USERNAME = 'root'
-PASSWORD = '1qazCDE#%TGB'
+PASSWORD = '123456'
 # DB = 'root'
-database = 'lvwz'
+database = 'lywz'
 # dialect + driver://username:passwor@host:port/database
 DB_URI = f'mysql+pymysql://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{database}'
 # DB_URI = f'mysql+pymysql://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DB}'.format(USERNAME,PASSWORD,HOSTANAME,PORT,DATABASE)

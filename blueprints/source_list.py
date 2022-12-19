@@ -42,15 +42,20 @@ def post_addpicture():
             # print(file)
 
             create_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-            image_path = 'D:\py项目\Vue_flask_python\static\images/' + file.filename
-            with open(image_path, "wb") as w:  # 使用with open()新建对象f
-                w.write(buffer_pirture)  # 写入数据，文件保存在上面指定的目录，加\n为了换行更方便阅读
-            # print("写入文件成功")
-            loggerError(get_time()+' '+' '+get_request_ip(request)+' '+str("写入图片成功"))
-            w.close()
-            return jsonify({"code": 200, "msg": "上传图片成功", "status": 1})
+            image_path = 'D:\py项目\Vue_flask_python\static\images\picture_' + file.filename
+            try:
+                with open(image_path, "wb") as w:  # 使用with open()新建对象f
+                    w.write(buffer_pirture)  # 写入数据，文件保存在上面指定的目录，加\n为了换行更方便阅读
+                # print("写入文件成功")
+                loggerError(get_time()+' '+' '+get_request_ip(request)+' '+str("写入图片成功"))
+                w.close()
+                return jsonify({"code": 200, "msg": "上传图片成功", "status": 1})
+            except Exception as e:
+                loggerError(get_time() + ' ' + ' ' + get_request_ip(request) + ' ' + str(e))
+                return jsonify({"code": 400, "msg": "上传图片异常", "status": 1})
     except Exception as e:
         loggerError(get_time()+' '+' '+get_request_ip(request)+' '+str(e))
+        return jsonify({"code": 400, "msg": "上传图片异常", "status": 1})
 
 @bp.route('/addSource', methods=['POST','GET'])
 def post_addSource():
@@ -88,6 +93,7 @@ def post_addSource():
             return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
     except Exception as e:
         loggerError(get_time()+' '+' '+get_request_ip(request)+' '+str(e))
+        return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
 
 
 @bp.route('/DeleteSource', methods=['POST'])
@@ -110,6 +116,7 @@ def post_DeleteSource():
         return jsonify({"code": 200, "msg": "删除成功", "status": 1})
     except Exception as e:
         loggerError(get_time() + ' ' + ' ' + get_request_ip(request) + ' ' + str(e))
+        return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
 
 @bp.route('/RecoverSource', methods=['POST'])
 def post_RecoverSource():
@@ -131,6 +138,7 @@ def post_RecoverSource():
         return jsonify({"code": 200, "msg": "恢复成功", "status": 1})
     except Exception as e:
         loggerError(get_time() + ' ' + ' ' + get_request_ip(request) + ' ' + str(e))
+        return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
 
 @bp.route('/tourist_resources', methods=['Get'])
 def get_tourist_sources():
@@ -164,6 +172,7 @@ def get_tourist_sources():
         loggerInfo(get_time()+" " + get_request_ip(request)+ " "+ "请求获取资源成功")
     except Exception as e:
         loggerError(get_time() + ' ' + ' ' + get_request_ip(request) + ' ' + str(e))
+        return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
     return jsonify(tourist_list)
 
 @bp.route('/Delete_tourist_resources', methods=['Get'])
@@ -193,6 +202,7 @@ def get_Delete_tourist_sources():
             # append 列表添加{}大括号 json数据 把多个字典变成列表
     except Exception as e:
         loggerError(get_time() + ' ' + ' ' + get_request_ip(request) + ' ' + str(e))
+        return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
     Conn().close()
     loggerInfo(get_time()+ " "+ get_request_ip(request)+" " + "请求获取删除列表成功")
     return jsonify(Delete_tourist_list)
@@ -235,6 +245,6 @@ def get_tourist_resources():
         loggerInfo(get_time()+" " + get_request_ip(request) + " "+ "请求获取资源细节成功")
         Conn().close()
     except Exception as e:
-        print("资源细节获取失败：%s" %e)
         loggerError(get_time() + ' ' + ' ' + get_request_ip(request) + ' ' + str(e))
+        return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
     return jsonify(tourist_list)

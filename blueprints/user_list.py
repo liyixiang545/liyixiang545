@@ -54,6 +54,7 @@ def get_captcha():
         return img
     except Exception as e:
         loggerError(get_time() + " " + get_request_ip(request)+ " " + str(e))
+        return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
 
 
 
@@ -94,6 +95,7 @@ def before_request():
             # print(g.user.username)
         except Exception as e:
             loggerError(get_time() + " " + get_request_ip(request)+ " " + str(e))
+            return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
             # g.user = None
             pass
 
@@ -117,6 +119,7 @@ def logout():
         session.clear()
     except Exception as e:
         loggerError(get_time() + " " + get_request_ip(request)+ " " + str(e))
+        return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
     return jsonify({"code": 200, "msg": "退出成功", "data": ""})
 
 
@@ -138,6 +141,7 @@ def login():
             return jsonify({"msg":d,"code":200})
         except Exception as e:
             loggerError(get_time() + " " + get_request_ip(request) + " " + str(e))
+            return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
     else:
         cc = request.get_data()  # 获取请求过来的数据request.data
         # print(cc)#打印 数据
@@ -228,6 +232,7 @@ def admin():
             return jsonify({"code": 400, "msg": "未登录admin", "status": 2})
     except Exception as e:
         loggerError(get_time() + " " + get_request_ip(request)+ " " + str(e))
+        return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
 
 
 # #登录jinja2表单处理
@@ -417,7 +422,6 @@ def getuser_list():
             # append 列表添加{}大括号 json数据 把多个字典变成列表
             Conn().close()
             return jsonify(user_list)
-
     except Exception as e:
         loggerError(get_time()+" "+get_request_ip(request)+" "+str(e))
         return jsonify({"code": 500, "msg": "用户接口异常，清仔细检查！", "status": "10"})
@@ -453,67 +457,78 @@ def getuserdetele_list():
         Conn().close()
     except Exception as e:
         loggerError(get_time() + " " + get_request_ip(request)+" " + str(e))
-        pass
+        return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
 
 # 删除账户(假状态删除)
 @bp.route('/DeleteUser_List', methods=['POST','PUT'])
 def deleteuser_list():
     Conn()
-    da = request.get_data()
-    # print(da)
-    data = json.loads(da)  # json.loads 把传回来的值整成字典
-    # print(data['email'])
-    # 获取字典里面的key为email的值
-    # 传回来的data 获取字典里面的msg的值
-    emailexec = data['msg']
-    # 修改数据 删除账户把账户状态值设为0
-    emailcache = UserModel.query.filter_by(email=emailexec)[0]
-    emailcache.status = 0
-    db.session.commit()
-    Conn().close()
+    try:
+        da = request.get_data()
+        # print(da)
+        data = json.loads(da)  # json.loads 把传回来的值整成字典
+        # print(data['email'])
+        # 获取字典里面的key为email的值
+        # 传回来的data 获取字典里面的msg的值
+        emailexec = data['msg']
+        # 修改数据 删除账户把账户状态值设为0
+        emailcache = UserModel.query.filter_by(email=emailexec)[0]
+        emailcache.status = 0
+        db.session.commit()
+        Conn().close()
+    except Exception as e:
+        loggerError(get_time() + " " + get_request_ip(request) + " " + str(e))
+        return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
     return data
 
 # 恢复账户
 @bp.route('/RecoverUser_List', methods=['POST','PUT'])
 def RecoverUser_List():
     Conn()
-    da = request.get_data()
-    # print(da)
-    data = json.loads(da)  # json.loads 把传回来的值整成字典
-    # print(data['email'])
-    # 获取字典里面的key为email的值
-    # 传回来的data 获取字典里面的msg的值
-    emailexec = data['msg']
-    # 修改数据 删除账户把账户状态值设为0
-    emailcache = UserModel.query.filter_by(email=emailexec)[0]
-    emailcache.status = 1
-    db.session.commit()
-    Conn().close()
+    try:
+        da = request.get_data()
+        # print(da)
+        data = json.loads(da)  # json.loads 把传回来的值整成字典
+        # print(data['email'])
+        # 获取字典里面的key为email的值
+        # 传回来的data 获取字典里面的msg的值
+        emailexec = data['msg']
+        # 修改数据 删除账户把账户状态值设为0
+        emailcache = UserModel.query.filter_by(email=emailexec)[0]
+        emailcache.status = 1
+        db.session.commit()
+        Conn().close()
+    except Exception as e:
+        loggerError(get_time() + " " + get_request_ip(request) + " " + str(e))
+        return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
     return data
 
 
 @bp.route('/changepasswd', methods=['POST','PUT'])
 def changepasswd():
     Conn()
-    da = request.get_data()
-    # print(da)
-    data = json.loads(da)  # json.loads 把传回来的值整成字典
-    # print(data['email'])
-    # 获取字典里面的key为email的值
-    # 传回来的data 获取字典里面的oldpwd的值
-    emailuser = data['user']
-    emailpwd = data['oldpwd']
-    nowpwd = data['nowpwd']
-    # 修改数据 删除账户把账户状态值设为0
-    emailcache = UserModel.query.filter_by(email=emailuser)[0]
-    if check_password_hash(emailcache.password, emailpwd):
-        hash_nowpwd = generate_password_hash(nowpwd)
-        # hash加密
-        emailcache.password = hash_nowpwd
-        db.session.commit()
-        Conn().close()
-    else:
-        return jsonify({"code":"400","msg":"密码输入错误，请重新输入","status":0})
-
+    try:
+        da = request.get_data()
+        # print(da)
+        data = json.loads(da)  # json.loads 把传回来的值整成字典
+        # print(data['email'])
+        # 获取字典里面的key为email的值
+        # 传回来的data 获取字典里面的oldpwd的值
+        emailuser = data['user']
+        emailpwd = data['oldpwd']
+        nowpwd = data['nowpwd']
+        # 修改数据 删除账户把账户状态值设为0
+        emailcache = UserModel.query.filter_by(email=emailuser)[0]
+        if check_password_hash(emailcache.password, emailpwd):
+            hash_nowpwd = generate_password_hash(nowpwd)
+            # hash加密
+            emailcache.password = hash_nowpwd
+            db.session.commit()
+            Conn().close()
+        else:
+            return jsonify({"code":"400","msg":"密码输入错误，请重新输入","status":0})
+    except Exception as e:
+        loggerError(get_time() + " " + get_request_ip(request) + " " + str(e))
+        return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
     return jsonify({"code":"200","msg":"更改成功","status":1})
 
