@@ -42,7 +42,7 @@ def post_addpicture():
             # print(file)
 
             create_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-            image_path = 'D:\py项目\Vue_flask_python\static\images\picture_' + file.filename
+            image_path = '../static/images/picture_' + file.filename
             try:
                 with open(image_path, "wb") as w:  # 使用with open()新建对象f
                     w.write(buffer_pirture)  # 写入数据，文件保存在上面指定的目录，加\n为了换行更方便阅读
