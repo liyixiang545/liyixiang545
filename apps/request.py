@@ -4,6 +4,8 @@ import requests
 import json
 import os
 
+# 连接数据库测试
+
 user = 'root'
 # pwd = '123456'
 pwd = '1qazCDE#%TGB'
