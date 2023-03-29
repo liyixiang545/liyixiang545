@@ -28,21 +28,17 @@ def post_addpicture():
         else:
             filepirture = request.files["file"]
             # 获取文件
-
-            file = request.files.get("file")
+            # file = request.files.get("file")
             # 获取文件
 
             # file_pirture = file.read()
-
             # print(file.filename)
 
             buffer_pirture = filepirture.read()
             # 读取二进制文件
 
-            # print(file)
-
             create_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-            image_path = '../static/images/picture_' + file.filename
+            image_path = '..//static//images//picture_' + filepirture.filename
             try:
                 with open(image_path, "wb") as w:  # 使用with open()新建对象f
                     w.write(buffer_pirture)  # 写入数据，文件保存在上面指定的目录，加\n为了换行更方便阅读
