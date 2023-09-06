@@ -10,11 +10,16 @@ Vue+flask_旅游小网站_毕业设计
 ![图片](https://github.com/liyixiang545/liyixiang545/assets/94123384/33bda121-9a59-45f2-b4ce-8b41e296106b)
 
 dist文件夹为前端打包的文件，index.html是前端入口
+
 apps/request.py，def_function文件夹为一些构造方法和测试条例
+
 blueprints文件夹里面是一些flask框架蓝图、对每个界面接口进行处理
+
 SqlConfig文件为数据库入口，固定写死了数据库获取端口、用户名、密码等信息 可自行更改
+
 app文件为入口文件，caturemodel文件为验证码模块代码，form文件为处理表单代码，model文件为数据库模型python-orm
-requirements.txt 文件为
+
+requirements.txt 文件为python库文件  需要执行pip3 install requirements.txt安装库
 
 #### 安装教程
 
