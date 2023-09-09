@@ -23,9 +23,14 @@ engine = create_engine(DB_URI, pool_size =100, max_overflow = 50, pool_timeout =
 
 
 def Conn():
-    conn = engine.connect()  # 连接
-    # print("建立数据库链接")
-    return conn
+    try:
+        conn = engine.connect()  # 连接
+        # print("建立数据库链接")
+        return conn
+    except Exception as e :
+        print("数据库链接异常，请检查数据库情况！")
+        Conn()
+
 
 
 

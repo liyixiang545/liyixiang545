@@ -37,18 +37,25 @@ def post_addpicture():
             buffer_pirture = filepirture.read()
             # 读取二进制文件
 
-            create_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-            image_path = '..//static//images//picture_' + filepirture.filename
+            create_time = time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime())
+
+            image_path = '.\\static\\images\\picture_' + create_time + "_" + filepirture.filename
+
+            dirs = '.\\static\\images'
+
+            if not os.path.exists(dirs):
+                os.makedirs(dirs)
+
             try:
                 with open(image_path, "wb") as w:  # 使用with open()新建对象f
                     w.write(buffer_pirture)  # 写入数据，文件保存在上面指定的目录，加\n为了换行更方便阅读
-                # print("写入文件成功")
-                loggerError(get_time()+' '+' '+get_request_ip(request)+' '+str("写入图片成功"))
-                w.close()
+
+                loggerInfo(get_time()+' '+' '+get_request_ip(request)+' '+str("写入图片成功"))
+
                 return jsonify({"code": 200, "msg": "上传图片成功", "status": 1})
             except Exception as e:
                 loggerError(get_time() + ' ' + ' ' + get_request_ip(request) + ' ' + str(e))
-                return jsonify({"code": 400, "msg": "上传图片异常", "status": 1})
+                return jsonify({"code": 400, "msg": e, "status": 1})
     except Exception as e:
         loggerError(get_time()+' '+' '+get_request_ip(request)+' '+str(e))
         return jsonify({"code": 400, "msg": "上传图片异常", "status": 1})
@@ -69,7 +76,16 @@ def post_addSource():
                 # picture_title = form.get('title')
                 # picture_msg = form.get('msg')
                 # img_name =  form.get('name')
-                image_path = 'D:\py项目\Vue_flask_python\static\images\picture_'  +  img_name
+
+                image_path = '.\\static\\images\\picture_'  + img_name
+
+                dirs = '.\\static\\images'
+
+                if not os.path.exists(dirs):
+                    os.makedirs(dirs)
+                    loggerError(get_time() + ' ' + ' ' + get_request_ip(request) + ' ' + "创建图片目录成功")
+                else:
+                    loggerError(get_time() + ' ' + ' ' + get_request_ip(request) + ' ' + "图片存储目录为空")
                 if image_path:
                     try:
                         create_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
