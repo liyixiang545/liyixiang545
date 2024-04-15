@@ -1,4 +1,4 @@
-![图片](https://github.com/liyixiang545/liyixiang545/assets/94123384/3511ae38-1156-43f0-9743-3e328d5a7205)Vue+flask_旅游小网站_毕业设计
+Vue+flask_旅游小网站_毕业设计
 
 #### 介绍
 毕业设计-flask-vue前后端分离
