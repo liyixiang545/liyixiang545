@@ -64,7 +64,7 @@ def getpage_html(url_text):
         html = etree.HTML(url_text)
         page_info = html.xpath("//a[@class='preview']/@href")
 
-        # print(page_info)
+        print(page_info)
     except:
         print("the function is faild !")
     return page_info

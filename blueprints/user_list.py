@@ -11,11 +11,11 @@ from flask import (Blueprint,
 from utils import CaptchaTool
 from form import RigisterForm
 from model import CatureModel, UserModel,db
-from exts import Conn,loggerInfo,loggerError,loggerWarning,get_request_ip,get_time
+from exts import loggerInfo,loggerError,loggerWarning,get_request_ip,get_time
 import redis
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
-
+# from SqlConfig import Conn
 # redis使用 缓存池
 pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True)
 r = redis.Redis(connection_pool=pool)
@@ -45,11 +45,11 @@ def get_captcha():
         print("最新验证码：", code)
         # print("5s后redis：",r.get('code'))  # 5秒后，取值就从orange变成None
         # code_hash = generate_password_hash(code)
-        Conn()
+        # Conn()
         cature = CatureModel(cature_code=code, cature_hash=img)
         db.session.add(cature)
         db.session.commit()
-        Conn().close()
+        # Conn().close()
         loggerInfo(get_time()+ " " + get_request_ip(request) + " " +"获取验证码成功")
         return img
     except Exception as e:
@@ -128,7 +128,7 @@ def logout():
 # 登录接口
 @bp.route('/Login', methods=['POST','GET'])
 def login():
-    Conn()
+    # Conn()
     if request.method == 'GET':
         try:
             count = UserModel.query.count()
@@ -136,7 +136,7 @@ def login():
             for i in range(0, count):
                 user = UserModel.query.filter_by(id=i + 1).first()
                 d.append({'msg':user.username})
-                Conn().close()
+                # Conn().close()
                 loggerInfo(get_time() + " " + get_request_ip(request)+ " " +"请求获取用户名成功")
             return jsonify({"msg":d,"code":200})
         except Exception as e:
@@ -165,12 +165,12 @@ def login():
                         if email == 'admin@qq.com':
                             try:
                                 if check_password_hash(user.password, password) and user:
-                                    Conn().close()
+                                    # Conn().close()
                                     loggerInfo(get_time() + " " + get_request_ip(request)+ " " + "请求admin用户登录")
                                     return jsonify({'code': 201, 'msg': "admin登录", "user": user.username})
                                 else:
                                     session.clear()
-                                    Conn().close()
+                                    # Conn().close()
                                     return jsonify({"code": 400, "msg": "邮箱和密码不匹配！请仔细检查!"})
                             except Exception as e:
                                 loggerError(get_time() + " " + get_request_ip(request) + " " + str(e))
@@ -179,22 +179,22 @@ def login():
 
                             if user.status == 0:
                                 session.clear()
-                                Conn().close()
+                                # Conn().close()
                                 return jsonify({"code": 405, "msg": '邮箱已被管理员注销，若需要登录，请联系管理员！'})
                             else:
                                 if check_password_hash(user.password, password):
-                                    Conn().close()
+                                    # Conn().close()
                                     loggerInfo(get_time() + " " + get_request_ip(request) + " " + "请求普通用户登录成功")
                                     return jsonify({"code": 200, "msg": '普通用户登录成功!', "user": user.username})  # 跳转回首页
                                 else:
                                     # flash("邮箱和密码不匹配！请仔细检查")
                                     session.clear()
-                                    Conn().close()
+                                    # Conn().close()
                                     loggerWarning(get_time() + " " + get_request_ip(request)+ " " +"请求密码输入错误")
                                     return jsonify({"code": 400, "msg": "邮箱和密码不匹配！请仔细检查!"})
                     else:
                         session.clear()
-                        Conn().close()
+                        # Conn().close()
                         loggerWarning(get_time() + " " + get_request_ip(request) + " " + "邮箱不存在")
                         return jsonify({"code": 401, "msg": "邮箱不存在"})
                 except Exception as e:
@@ -343,7 +343,7 @@ def admin():
 @bp.route('/Rigister', methods=['POST'])
 def rigister():
     try:
-        Conn()
+        # Conn()
         form = RigisterForm(request.form)
         # form = RigisterForm(request.form)  # 处理登录模块，若是post请求则去做表单验证
         # print(form.data)
@@ -387,7 +387,7 @@ def rigister():
                 # print(r.get("code"))
                 return jsonify({"code": 401, "msg": "验证码错误，请重新输入!"})
         else:
-            Conn().close()
+            # Conn().close()
             return jsonify({"code": 400, "msg": "验证失败，邮箱已存在或格式有误，请重新输入！", "status": "1"})
     except Exception as e:
         loggerError(get_time()+" "+get_request_ip(request)+" "+str(e))
@@ -420,7 +420,7 @@ def getuser_list():
                 i = list.id
                 pass
             # append 列表添加{}大括号 json数据 把多个字典变成列表
-            Conn().close()
+            # Conn().close()
             return jsonify(user_list)
     except Exception as e:
         loggerError(get_time()+" "+get_request_ip(request)+" "+str(e))
@@ -432,7 +432,7 @@ def getuserdetele_list():
     userdetele_list = []
     # 定义为列表
     try:
-        Conn()
+        # Conn()
         # 查询该数据库长度(条数)
         count = UserModel.query.count()
         # print(count)
@@ -454,7 +454,7 @@ def getuserdetele_list():
                 pass
             return jsonify(userdetele_list)
             # append 列表添加{}大括号 json数据 把多个字典变成列表
-        Conn().close()
+        # Conn().close()
     except Exception as e:
         loggerError(get_time() + " " + get_request_ip(request)+" " + str(e))
         return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
@@ -462,7 +462,7 @@ def getuserdetele_list():
 # 删除账户(假状态删除)
 @bp.route('/DeleteUser_List', methods=['POST','PUT'])
 def deleteuser_list():
-    Conn()
+    # Conn()
     try:
         da = request.get_data()
         # print(da)
@@ -475,7 +475,7 @@ def deleteuser_list():
         emailcache = UserModel.query.filter_by(email=emailexec)[0]
         emailcache.status = 0
         db.session.commit()
-        Conn().close()
+        # Conn().close()
     except Exception as e:
         loggerError(get_time() + " " + get_request_ip(request) + " " + str(e))
         return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
@@ -484,7 +484,7 @@ def deleteuser_list():
 # 恢复账户
 @bp.route('/RecoverUser_List', methods=['POST','PUT'])
 def RecoverUser_List():
-    Conn()
+    # Conn()
     try:
         da = request.get_data()
         # print(da)
@@ -497,7 +497,7 @@ def RecoverUser_List():
         emailcache = UserModel.query.filter_by(email=emailexec)[0]
         emailcache.status = 1
         db.session.commit()
-        Conn().close()
+        # Conn().close()
     except Exception as e:
         loggerError(get_time() + " " + get_request_ip(request) + " " + str(e))
         return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
@@ -506,7 +506,7 @@ def RecoverUser_List():
 
 @bp.route('/changepasswd', methods=['POST','PUT'])
 def changepasswd():
-    Conn()
+    # Conn()
     try:
         da = request.get_data()
         # print(da)
@@ -524,7 +524,7 @@ def changepasswd():
             # hash加密
             emailcache.password = hash_nowpwd
             db.session.commit()
-            Conn().close()
+            # Conn().close()
         else:
             return jsonify({"code":"400","msg":"密码输入错误，请重新输入","status":0})
     except Exception as e:

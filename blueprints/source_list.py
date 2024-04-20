@@ -13,8 +13,8 @@ import os
 # import base64
 from form import UpsourceForm
 from model import SourceModel,db
-from exts import Conn,loggerInfo,loggerError,loggerWarning,get_time,get_request_ip
-
+from exts import loggerInfo,loggerError,loggerWarning,get_time,get_request_ip
+# from SqlConfig import Conn
 bp = Blueprint('source', __name__, url_prefix="/source")
 
 
@@ -62,7 +62,7 @@ def post_addpicture():
 
 @bp.route('/addSource', methods=['POST','GET'])
 def post_addSource():
-    Conn()
+    # Conn()
     try:
         form = UpsourceForm(request.form)
         # return jsonify({"code": 200, "msg": "上传成功", "status": 1})
@@ -110,7 +110,7 @@ def post_addSource():
 
 @bp.route('/DeleteSource', methods=['POST'])
 def post_DeleteSource():
-    Conn()
+    # Conn()
     try:
         da = request.get_data()
         # print(da)
@@ -123,7 +123,7 @@ def post_DeleteSource():
         sourcecache.status = 0
         sourcecache.update_time = up_time
         db.session.commit()
-        Conn().close()
+        # Conn().close()
         loggerInfo(get_time() +" " + get_request_ip(request)+" " + "请求删除失败")
         return jsonify({"code": 200, "msg": "删除成功", "status": 1})
     except Exception as e:
@@ -132,7 +132,7 @@ def post_DeleteSource():
 
 @bp.route('/RecoverSource', methods=['POST'])
 def post_RecoverSource():
-    Conn()
+    # Conn()
     try:
         da = request.get_data()
         # print(da)
@@ -145,7 +145,7 @@ def post_RecoverSource():
         sourcecache.status = 1
         sourcecache.update_time = up_time
         db.session.commit()
-        Conn().close()
+        # Conn().close()
         loggerInfo(get_time()+ " " + get_request_ip(request)+ " " + "请求恢复资源成功")
         return jsonify({"code": 200, "msg": "恢复成功", "status": 1})
     except Exception as e:
@@ -154,7 +154,7 @@ def post_RecoverSource():
 
 @bp.route('/tourist_resources', methods=['Get'])
 def get_tourist_sources():
-    Conn()
+    # Conn()
     try:
         tourist_list = []
         # sourceuser = data['user']
@@ -180,7 +180,7 @@ def get_tourist_sources():
             # append 列表添加{}大括号 json数据 把多个字典变成列表
         # except:
         #     print("获取资源异常")
-        Conn().close()
+        # Conn().close()
         loggerInfo(get_time()+" " + get_request_ip(request)+ " "+ "请求获取资源成功")
     except Exception as e:
         loggerError(get_time() + ' ' + ' ' + get_request_ip(request) + ' ' + str(e))
@@ -189,7 +189,7 @@ def get_tourist_sources():
 
 @bp.route('/Delete_tourist_resources', methods=['Get'])
 def get_Delete_tourist_sources():
-    Conn()
+    # Conn()
     Delete_tourist_list = []
     # 定义为列表
     try:
@@ -215,7 +215,7 @@ def get_Delete_tourist_sources():
     except Exception as e:
         loggerError(get_time() + ' ' + ' ' + get_request_ip(request) + ' ' + str(e))
         return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})
-    Conn().close()
+    # Conn().close()
     loggerInfo(get_time()+ " "+ get_request_ip(request)+" " + "请求获取删除列表成功")
     return jsonify(Delete_tourist_list)
 
@@ -234,7 +234,7 @@ def get_tourist_resources():
     # 查询该数据库长度(条数)
     # count = SourceModel.query.count()
     # print(count)
-    Conn()
+    # Conn()
     try:
         list = SourceModel.query.filter_by(source_title=title)[0]
         if list:
@@ -255,7 +255,7 @@ def get_tourist_resources():
         # except:
         #     print("获取资源异常")
         loggerInfo(get_time()+" " + get_request_ip(request) + " "+ "请求获取资源细节成功")
-        Conn().close()
+        # Conn().close()
     except Exception as e:
         loggerError(get_time() + ' ' + ' ' + get_request_ip(request) + ' ' + str(e))
         return jsonify({"code": 400, "msg": "非法请求，请检查！", "status": 1})

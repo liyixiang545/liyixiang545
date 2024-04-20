@@ -9,21 +9,20 @@ from flask import (Blueprint,
                    make_response,
                    g,
                    json,
-
                    )
 # from decorators import login_required
 # 导入flask中的蓝图
 from model import CommentModel, UserModel,db  # 导入model数据库表 migrate映射用和操作数据使用
-from exts import Conn,get_time,loggerInfo,loggerError,loggerWarning,get_request_ip
+from exts import get_time,loggerInfo,loggerError,loggerWarning,get_request_ip
 from form import QuestionForm
 # url_prefix:127.0.0.1:5000/book/list
 bp = Blueprint("comment", __name__, url_prefix="/comment")
-
+# from SqlConfig import Conn
 
 @bp.route('/list', methods=['GET', 'POST'])
 # @login_required
 def comment_list():
-    Conn()
+    # Conn()
     if request.method == 'GET':
         comment_list = []
         try:
@@ -49,7 +48,7 @@ def comment_list():
                     i = list.id + 1
             # except:
             #     print("获取评论异常")
-            Conn().close()
+            # Conn().close()
             loggerInfo(get_time()+" " + get_request_ip(request)+" " + "请求获取评论成功")
             return jsonify(comment_list)
         except Exception as e:
@@ -68,7 +67,7 @@ def comment_list():
             # CommentModel.query.filter_by(id=emailcache.id).delete()
             emailcache.status = 0
             db.session.commit()
-            Conn().close()
+            # Conn().close()
             loggerInfo(get_time()+" " + get_request_ip(request)+" " +"请求删除成功")
             return jsonify({"data": data, "code": 200, "msg": "删除成功"})
         except Exception as e:
@@ -118,7 +117,7 @@ def Comment_view():
     # 删除数据
     # Comment.query.filter_by(id=1).delete()
     # db.session.commit()
-    Conn()
+    # Conn()
     form = QuestionForm(request.form)
 
     # 获取用户名字 全局变量g 在q求情前获取
@@ -144,7 +143,7 @@ def Comment_view():
                 db.session.add(Comment)
                 db.session.commit()
                 loggerInfo(get_time()+" "+get_request_ip(request)+" "+"请求发布评论成功")
-                Conn().close()
+                # Conn().close()
                 return jsonify({"code": "200", "msg": "发布成功", "status": 1})
             else:
                 return jsonify({"code": "401", "msg": "当前未登录，请您登录！", "status": 0})
@@ -157,7 +156,7 @@ def Comment_view():
 @bp.route('/Deletelist', methods=['GET', 'POST'])
 # @login_required
 def Deletelist():
-    Conn()
+    # Conn()
     if request.method == 'GET':
         try:
             Delete_list = []
@@ -185,7 +184,7 @@ def Deletelist():
             # except:
             #     print("获取评论异常")
             loggerInfo(get_time()+" " + get_request_ip(request)+ " " +"请求获取删除列表成功")
-            Conn().close()
+            # Conn().close()
             return jsonify(Delete_list)
         except Exception as e:
             loggerError(get_time()+' '+' '+get_request_ip(request)+' '+str(e))
@@ -205,7 +204,7 @@ def Deletelist():
             # CommentModel.query.filter_by(id=emailcache.id).delete()
             emailcache.status = 1
             db.session.commit()
-            Conn().close()
+            # Conn().close()
             loggerInfo(get_time()+" " + get_request_ip(request)+ " " + "请求恢复成功")
             return jsonify({"data": data, "code": 200, "msg": "恢复成功"})
         except Exception as e:

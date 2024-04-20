@@ -3,11 +3,14 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 import SqlConfig
 
-print("------初始化中-----")
+
 app = Flask(__name__)
 app.config.from_object(SqlConfig)
 db = SQLAlchemy(app)
+
 def create_app():
+    print("————————初始化中————————")
+    SqlConfig.Conn()
     return app
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
@@ -24,3 +27,4 @@ def create_migrate():
     migrate = Migrate(app, db)
     # print("调用绑定app与db后migrate")
     return migrate
+
